@@ -147,7 +147,7 @@ export interface Sql {
    * select "first_name" from person
    * ```
    *
-   * The refefences can also include a table name:
+   * The references can also include a table name:
    *
    * ```ts
    * const columnRef = 'person.first_name'
@@ -161,7 +161,7 @@ export interface Sql {
    * select "person"."first_name" from person
    * ```
    *
-   * The refefences can also include a schema on supported databases:
+   * The references can also include a schema on supported databases:
    *
    * ```ts
    * const columnRef = 'public.person.first_name'
@@ -222,7 +222,7 @@ export interface Sql {
    * but can also be used for any other identifiers like index names.
    *
    * You should use {@link Sql.ref | ref} and {@link Sql.table | table}
-   * instead of this whenever possible as they produce a more sematic
+   * instead of this whenever possible as they produce a more semantic
    * operation node tree.
    *
    * WARNING! Using this with unchecked inputs WILL lead to SQL injection
@@ -247,7 +247,7 @@ export interface Sql {
    * const columnName = 'first_name'
    * const table = 'person'
    *
-   * sql`select ${sql.id(schema, table, columnName)}} from ${sql.id(schema, table)}`
+   * sql`select ${sql.id(schema, table, columnName)} from ${sql.id(schema, table)}`
    * ```
    *
    * The generated SQL (PostgreSQL):
