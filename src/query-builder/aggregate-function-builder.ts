@@ -2,7 +2,6 @@ import { freeze } from '../util/object-utils.js'
 import { AggregateFunctionNode } from '../operation-node/aggregate-function-node.js'
 import { AliasNode } from '../operation-node/alias-node.js'
 import { IdentifierNode } from '../operation-node/identifier-node.js'
-import { preventAwait } from '../util/prevent-await.js'
 import { OverBuilder } from './over-builder.js'
 import { createOverBuilder } from '../parser/parse-utils.js'
 import {
@@ -113,7 +112,7 @@ export class AggregateFunctionBuilder<DB, TB extends keyof DB, O = unknown>
    *   .selectFrom('person')
    *   .innerJoin('pet', 'pet.owner_id', 'person.id')
    *   .select((eb) =>
-   *     eb.fn.jsonAgg('pet.name').orderBy('pet.name').as('person_pets')
+   *     eb.fn.jsonAgg('pet').orderBy('pet.name').as('person_pets')
    *   )
    *   .executeTakeFirstOrThrow()
    * ```
@@ -121,7 +120,7 @@ export class AggregateFunctionBuilder<DB, TB extends keyof DB, O = unknown>
    * The generated SQL (PostgreSQL):
    *
    * ```sql
-   * select json_agg("pet"."name" order by "pet"."name") as "person_pets"
+   * select json_agg("pet" order by "pet"."name") as "person_pets"
    * from "person"
    * inner join "pet" ON "pet"."owner_id" = "person"."id"
    * ```
@@ -343,11 +342,6 @@ export class AggregateFunctionBuilder<DB, TB extends keyof DB, O = unknown>
     return this.#props.aggregateFunctionNode
   }
 }
-
-preventAwait(
-  AggregateFunctionBuilder,
-  "don't await AggregateFunctionBuilder instances. They are never executed directly and are always just a part of a query.",
-)
 
 /**
  * {@link AggregateFunctionBuilder} with an alias. The result of calling {@link AggregateFunctionBuilder.as}.
